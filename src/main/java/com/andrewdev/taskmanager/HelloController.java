@@ -1,4 +1,4 @@
-package com.andrewgames.taskmanager;
+package com.andrewdev.taskmanager;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
