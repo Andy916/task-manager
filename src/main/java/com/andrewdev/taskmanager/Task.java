@@ -18,9 +18,11 @@ public class Task {
     private boolean completed = false;
 
     //Constructors
+    // what Spring actually uses
     public Task() {
     }
 
+    // only for creating tasks in code
     public Task(String title, String description) {
         this.title = title;
         this.description = description;
