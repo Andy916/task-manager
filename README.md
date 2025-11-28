@@ -239,17 +239,6 @@ This project demonstrates understanding of:
 - Entity mapping with JPA annotations
 - Maven project structure
 
-## Future Enhancements
-
-Potential features to add:
-- Input validation (prevent empty titles)
-- Error handling and custom error messages
-- Filter tasks by completion status
-- Add due dates and priority levels
-- Pagination for large task lists
-- Search functionality
-- User authentication
-
 ## License
 
 This project is open source and available for educational purposes.
