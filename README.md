@@ -4,7 +4,7 @@ A RESTful API built with Spring Boot for managing tasks. This project demonstrat
 
 ## 🛠️ Technologies Used
 
-- Java 17
+- Java 25
 - Spring Boot
 - Spring Web (REST API)
 - Spring Data JPA (Database operations)
