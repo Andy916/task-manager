@@ -2,16 +2,16 @@
 
 A RESTful API built with Spring Boot for managing tasks. This project demonstrates CRUD operations, REST principles, and Spring Data JPA integration with an H2 in-memory database.
 
-## Technologies Used
+## 🛠️ Technologies Used
 
-- Java 25
+- Java 17
 - Spring Boot
 - Spring Web (REST API)
 - Spring Data JPA (Database operations)
 - H2 Database (In-memory database)
 - Maven (Project management)
 
-## Features
+## ✨ Features
 
 - Create new tasks
 - Retrieve all tasks or a specific task by ID
@@ -21,7 +21,7 @@ A RESTful API built with Spring Boot for managing tasks. This project demonstrat
 - JSON request/response format
 - RESTful API design
 
-## Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
 
@@ -47,7 +47,7 @@ cd task-manager
 
 Press `Ctrl + C` in the terminal, then confirm to terminate the batch job.
 
-## API Endpoints
+## 📡 API Endpoints
 
 ### Get All Tasks
 ```
@@ -158,7 +158,7 @@ Returns 200 status code with no body if deletion was successful.
 **Example Response (404 Not Found):**
 If task doesn't exist, returns 404 status code.
 
-## Testing the API
+## 🧪 Testing the API
 
 You can test the API using:
 - **Thunder Client** (VS Code extension) - Recommended
@@ -174,7 +174,7 @@ You can test the API using:
 4. **Update a task**: PUT to `http://localhost:8080/tasks/1` with JSON body
 5. **Delete a task**: DELETE to `http://localhost:8080/tasks/1`
 
-## Project Structure
+## 📁 Project Structure
 
 ```
 taskmanager/
@@ -190,7 +190,7 @@ taskmanager/
 └── pom.xml                                       # Maven configuration
 ```
 
-## How It Works
+## 🔄 How It Works
 
 1. **Entity (Task.java)**: Defines the structure of a task and maps to a database table
 2. **Repository (TaskRepository.java)**: Provides methods to interact with the database (save, find, delete)
@@ -216,7 +216,7 @@ Spring converts Task object to JSON
 Client receives JSON response with the created task
 ```
 
-## Database
+## 💾 Database
 
 This application uses an **H2 in-memory database**, which means:
 - Data is stored in memory (RAM) while the application is running
@@ -226,7 +226,7 @@ This application uses an **H2 in-memory database**, which means:
 
 To use a persistent database (MySQL, PostgreSQL, etc.) in production, you would update the dependencies and configuration in `application.properties`.
 
-## Learning Outcomes
+## 📚 Learning Outcomes
 
 This project demonstrates understanding of:
 - RESTful API design principles
@@ -239,6 +239,6 @@ This project demonstrates understanding of:
 - Entity mapping with JPA annotations
 - Maven project structure
 
-## License
+## 📝 License
 
-This project is open source and available for educational purposes.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
