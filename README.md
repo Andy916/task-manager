@@ -1,18 +1,26 @@
 # Task Manager API
 
-A RESTful API built with Spring Boot for managing tasks. This project demonstrates CRUD operations, REST principles, and Spring Data JPA integration with PostgreSQL database.
+A RESTful API built with Spring Boot for managing tasks with JWT authentication. This project demonstrates CRUD operations, REST principles, Spring Security, and Spring Data JPA integration with PostgreSQL database.
+
+## 🌐 Live Demo
+The API is deployed and accessible at:
+**https://task-manager-production-42ca.up.railway.app**
 
 ## 🛠️ Technologies Used
 
-- Java 25
-- Spring Boot
+- Java 21
+- Spring Boot 3.5.8
 - Spring Web (REST API)
 - Spring Data JPA (Database operations)
+- Spring Security (JWT Authentication)
 - PostgreSQL (Relational database)
+- Railway (Cloud deployment)
 - Maven (Project management)
 
 ## ✨ Features
 
+- User registration and authentication with JWT
+- Token-based authorization
 - Create new tasks
 - Retrieve all tasks or a specific task by ID
 - Update existing tasks
@@ -21,7 +29,8 @@ A RESTful API built with Spring Boot for managing tasks. This project demonstrat
 - JSON request/response format
 - RESTful API design
 - Persistent data storage with PostgreSQL
-- Proper HTTP status code handling (200, 400, 404)
+- Proper HTTP status code handling (200, 400, 401, 403, 404)
+- Cloud deployment with live public URL
 
 ## 🚀 Getting Started
 
@@ -40,10 +49,10 @@ A RESTful API built with Spring Boot for managing tasks. This project demonstrat
    - Create a new database named 'taskmanager' (or your preferred name)
 
 3. Configure the database connection:
-   - Open src/main/resources/application.properties
+   - Open `src/main/resources/application.properties`
    - Update the following properties with your database credentials:
 
-```
+```properties
 spring.datasource.url=jdbc:postgresql://localhost:5432/taskmanager
 spring.datasource.username=your_username
 spring.datasource.password=your_password
@@ -51,7 +60,7 @@ spring.jpa.hibernate.ddl-auto=update
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
 ```
 
-### Running the Application
+### Running the Application Locally
 
 1. Clone the repository:
 ```bash
@@ -74,7 +83,58 @@ Press `Ctrl + C` in the terminal, then confirm to terminate the batch job.
 
 ## 📡 API Endpoints
 
-### Get All Tasks
+### 🔓 Authentication (Public - No token required)
+
+#### Register a New User
+```
+POST /auth/register
+Content-Type: application/json
+```
+
+**Request Body:**
+```json
+{
+  "username": "your_username",
+  "password": "your_password"
+}
+```
+
+**Example Response:**
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiJ9..."
+}
+```
+
+#### Login
+```
+POST /auth/login
+Content-Type: application/json
+```
+
+**Request Body:**
+```json
+{
+  "username": "your_username",
+  "password": "your_password"
+}
+```
+
+**Example Response:**
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiJ9..."
+}
+```
+
+### 🔒 Tasks (Protected - Requires JWT token)
+
+**All task endpoints require an Authorization header:**
+```
+Authorization: Bearer YOUR_TOKEN_HERE
+```
+
+#### Get All Tasks
 ```
 GET /tasks
 ```
@@ -98,7 +158,7 @@ Returns a list of all tasks.
 ]
 ```
 
-### Get Task by ID
+#### Get Task by ID
 ```
 GET /tasks/{id}
 ```
@@ -117,7 +177,7 @@ Returns a specific task by ID.
 **Example Response (404 Not Found):**
 If task doesn't exist, returns 404 status code.
 
-### Create Task
+#### Create Task
 ```
 POST /tasks
 Content-Type: application/json
@@ -147,7 +207,7 @@ Content-Type: application/json
 **Example Response (400 Bad Request):**
 If the request body is invalid, returns 400 status code.
 
-### Update Task
+#### Update Task
 ```
 PUT /tasks/{id}
 Content-Type: application/json
@@ -175,10 +235,7 @@ Content-Type: application/json
 **Example Response (404 Not Found):**
 If task doesn't exist, returns 404 status code.
 
-**Example Response (400 Bad Request):**
-If the request body is invalid, returns 400 status code.
-
-### Delete Task
+#### Delete Task
 ```
 DELETE /tasks/{id}
 ```
@@ -189,21 +246,34 @@ Returns 200 status code with no body if deletion was successful.
 **Example Response (404 Not Found):**
 If task doesn't exist, returns 404 status code.
 
+## 🔐 Authentication Flow
+
+1. **Register** a new account: `POST /auth/register` with username and password
+2. **Receive** a JWT token in the response
+3. **Include** the token in the `Authorization` header for all protected endpoints
+4. **Token expires** after 24 hours - login again to get a new token
+
+### Example with Thunder Client/Postman:
+1. Register or login to get a token
+2. Add header to all task requests:
+   - **Key:** `Authorization`
+   - **Value:** `Bearer YOUR_TOKEN_HERE`
+
 ## 🧪 Testing the API
 
 You can test the API using:
 - **Thunder Client** (VS Code extension) - Recommended
 - **Postman** (Standalone application)
 - **cURL** (Command line)
-- **Web Browser** (For GET requests only)
 
-### Example Thunder Client/Postman Tests
+### Example Tests
 
-1. **Create a task**: POST to `http://localhost:8080/tasks` with JSON body
-2. **Get all tasks**: GET to `http://localhost:8080/tasks`
-3. **Get specific task**: GET to `http://localhost:8080/tasks/1`
-4. **Update a task**: PUT to `http://localhost:8080/tasks/1` with JSON body
-5. **Delete a task**: DELETE to `http://localhost:8080/tasks/1`
+1. **Register a user**: POST to `https://task-manager-production-42ca.up.railway.app/auth/register`
+2. **Copy the token** from the response
+3. **Get all tasks**: GET to `https://task-manager-production-42ca.up.railway.app/tasks` with Authorization header
+4. **Create a task**: POST to `https://task-manager-production-42ca.up.railway.app/tasks` with Authorization header and JSON body
+5. **Update a task**: PUT to `https://task-manager-production-42ca.up.railway.app/tasks/1` with Authorization header and JSON body
+6. **Delete a task**: DELETE to `https://task-manager-production-42ca.up.railway.app/tasks/1` with Authorization header
 
 ## 📁 Project Structure
 
@@ -215,36 +285,43 @@ taskmanager/
 │           └── com/
 │               └── andrewdev/
 │                   └── taskmanager/
-│                       ├── Task.java              # Entity class (database table structure)
-│                       ├── TaskRepository.java    # Repository interface (database operations)
-│                       └── TaskController.java    # REST controller (API endpoints)
-└── pom.xml                                       # Maven configuration
+│                       ├── Task.java                    # Entity class (task table)
+│                       ├── TaskRepository.java          # Repository (task database operations)
+│                       ├── TaskController.java          # REST controller (task endpoints)
+│                       ├── User.java                    # Entity class (user table)
+│                       ├── UserRepository.java          # Repository (user database operations)
+│                       ├── AuthController.java          # REST controller (auth endpoints)
+│                       ├── AuthService.java             # Service (registration/login logic)
+│                       ├── AuthRequest.java             # DTO (login/register request)
+│                       ├── AuthResponse.java            # DTO (JWT token response)
+│                       └── security/
+│                           ├── JwtUtil.java             # JWT token generation and validation
+│                           ├── JwtAuthFilter.java       # Filter (intercepts requests, validates tokens)
+│                           └── SecurityConfig.java      # Security configuration
+└── pom.xml                                             # Maven configuration
 ```
 
 ## 🔄 How It Works
 
-1. **Entity (Task.java)**: Defines the structure of a task and maps to a database table
-2. **Repository (TaskRepository.java)**: Provides methods to interact with the database (save, find, delete)
-3. **Controller (TaskController.java)**: Handles HTTP requests and returns JSON responses
+### Authentication Flow
+1. User sends `POST /auth/register` with username and password
+2. `AuthService` hashes the password with BCrypt and saves user to database
+3. `JwtUtil` generates a JWT token containing the username
+4. Token is returned to the user
 
-### Request Flow Example
-
+### Request Flow for Protected Endpoints
 ```
-Client sends POST /tasks with JSON
+Client sends request to /tasks with Authorization: Bearer TOKEN
     ↓
-Spring routes to TaskController.createTask()
+JwtAuthFilter intercepts the request
     ↓
-Spring converts JSON to Task object
+JwtUtil validates the token and extracts username
     ↓
-Controller calls taskRepository.save(task)
+If valid, request proceeds to TaskController
     ↓
-Repository saves to PostgreSQL database
+TaskController processes request and returns JSON response
     ↓
-Database generates ID and returns saved task
-    ↓
-Spring converts Task object to JSON
-    ↓
-Client receives JSON response with the created task
+Client receives response
 ```
 
 ## 💾 Database
@@ -255,22 +332,37 @@ This application uses **PostgreSQL** as its relational database, which means:
 - Scalable and reliable for real-world applications
 - Supports advanced SQL features
 
-The application uses Spring Data JPA with Hibernate to handle database operations, automatically creating and managing the task table schema.
+The application uses Spring Data JPA with Hibernate to handle database operations, automatically creating and managing the task and user table schemas.
+
+## ☁️ Deployment
+
+This API is deployed on **Railway** with:
+- PostgreSQL database hosted on Railway
+- Automatic deployments from GitHub
+- Environment variables for secure configuration
+- Public HTTPS URL for global access
 
 ## 📚 Learning Outcomes
 
 This project demonstrates understanding of:
 - RESTful API design principles
 - Spring Boot framework
+- JWT authentication and authorization
+- Spring Security configuration
 - CRUD operations (Create, Read, Update, Delete)
 - HTTP methods (GET, POST, PUT, DELETE)
-- Proper HTTP status code handling
+- Proper HTTP status code handling (200, 400, 401, 403, 404)
 - JSON request/response handling
 - Spring Data JPA and database operations
 - PostgreSQL database integration
+- Password hashing with BCrypt
+- Token-based authentication (stateless sessions)
+- Security filter chains
 - Dependency injection with @Autowired
 - Entity mapping with JPA annotations
 - Maven project structure
+- Cloud deployment with Railway
+- Environment variable configuration
 
 ## 📝 License
 
