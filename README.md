@@ -275,6 +275,20 @@ You can test the API using:
 5. **Update a task**: PUT to `https://task-manager-production-42ca.up.railway.app/tasks/1` with Authorization header and JSON body
 6. **Delete a task**: DELETE to `https://task-manager-production-42ca.up.railway.app/tasks/1` with Authorization header
 
+## 📸 Screenshots
+
+### User Registration
+![User Registration](images/auth-register.png)
+*Creating a new user account and receiving a JWT token*
+
+### Creating a New Task
+![Create Task](images/create-task.png)
+*Adding a new task to the database with JWT authentication*
+
+### Getting All Tasks
+![Get All Tasks](images/get-tasks.png)
+*Retrieving tasks with JWT authentication*
+
 ## 📁 Project Structure
 
 ```
