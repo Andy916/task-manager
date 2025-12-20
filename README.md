@@ -4,7 +4,7 @@ A RESTful API built with Spring Boot for managing tasks with JWT authentication.
 
 ## 🌐 Live Demo
 The API is deployed and accessible at:
-**https://task-manager-production-42ca.up.railway.app**
+**https://task-manager-api-mope.onrender.com**
 
 ## 🛠️ Technologies Used
 
@@ -14,7 +14,8 @@ The API is deployed and accessible at:
 - Spring Data JPA (Database operations)
 - Spring Security (JWT Authentication)
 - PostgreSQL (Relational database)
-- Railway (Cloud deployment)
+- Docker (Containerization)
+- Render (Cloud deployment)
 - Maven (Project management)
 
 ## ✨ Features
@@ -31,6 +32,7 @@ The API is deployed and accessible at:
 - Persistent data storage with PostgreSQL
 - Proper HTTP status code handling (200, 400, 401, 403, 404)
 - Cloud deployment with live public URL
+- Dockerized for consistent deployment
 
 ## 🚀 Getting Started
 
@@ -39,10 +41,11 @@ The API is deployed and accessible at:
 - Java 17 or higher
 - Maven (included via Maven Wrapper)
 - PostgreSQL installed locally OR access to a cloud PostgreSQL database
+- Docker (optional, for containerized deployment)
 
 ### Database Setup
 
-1. Install PostgreSQL on your machine (or use a cloud service like Railway, Supabase, or Render)
+1. Install PostgreSQL on your machine (or use a cloud service like Render, Supabase, or Railway)
 
 2. Create a database for the application:
    - Open PostgreSQL command line or pgAdmin
@@ -268,12 +271,14 @@ You can test the API using:
 
 ### Example Tests
 
-1. **Register a user**: POST to `https://task-manager-production-42ca.up.railway.app/auth/register`
+1. **Register a user**: POST to `https://task-manager-api-mope.onrender.com/auth/register`
 2. **Copy the token** from the response
-3. **Get all tasks**: GET to `https://task-manager-production-42ca.up.railway.app/tasks` with Authorization header
-4. **Create a task**: POST to `https://task-manager-production-42ca.up.railway.app/tasks` with Authorization header and JSON body
-5. **Update a task**: PUT to `https://task-manager-production-42ca.up.railway.app/tasks/1` with Authorization header and JSON body
-6. **Delete a task**: DELETE to `https://task-manager-production-42ca.up.railway.app/tasks/1` with Authorization header
+3. **Get all tasks**: GET to `https://task-manager-api-mope.onrender.com/tasks` with Authorization header
+4. **Create a task**: POST to `https://task-manager-api-mope.onrender.com/tasks` with Authorization header and JSON body
+5. **Update a task**: PUT to `https://task-manager-api-mope.onrender.com/tasks/1` with Authorization header and JSON body
+6. **Delete a task**: DELETE to `https://task-manager-api-mope.onrender.com/tasks/1` with Authorization header
+
+**Note:** The first request may take ~30 seconds as the free tier app wakes from sleep.
 
 ## 📸 Screenshots
 
@@ -312,15 +317,16 @@ taskmanager/
 │                           ├── JwtUtil.java             # JWT token generation and validation
 │                           ├── JwtAuthFilter.java       # Filter (intercepts requests, validates tokens)
 │                           └── SecurityConfig.java      # Security configuration
+├── Dockerfile                                          # Docker configuration for deployment
 └── pom.xml                                             # Maven configuration
 ```
 
-## 🔄 How It Works
+## 📄 How It Works
 
 ### Authentication Flow
 1. User sends `POST /auth/register` with username and password
 2. `AuthService` hashes the password with BCrypt and saves user to database
-3. `JwtUtil` generates a JWT token containing the username
+3. `JwtUtil` generates a JWT token containing the username (valid for 24 hours)
 4. Token is returned to the user
 
 ### Request Flow for Protected Endpoints
@@ -350,11 +356,19 @@ The application uses Spring Data JPA with Hibernate to handle database operation
 
 ## ☁️ Deployment
 
-This API is deployed on **Railway** with:
-- PostgreSQL database hosted on Railway
+This API is deployed on **Render** with:
+- PostgreSQL database hosted on Render's free tier
+- Docker containerization for consistent builds
 - Automatic deployments from GitHub
 - Environment variables for secure configuration
 - Public HTTPS URL for global access
+- Free tier with 90-day database lifecycle (easily renewable)
+
+### Deployment Architecture
+- **Web Service**: Dockerized Spring Boot application
+- **Database**: Managed PostgreSQL instance
+- **Build**: Multi-stage Docker build for optimization
+- **Runtime**: Java 21 with minimal JRE image
 
 ## 📚 Learning Outcomes
 
@@ -375,8 +389,31 @@ This project demonstrates understanding of:
 - Dependency injection with @Autowired
 - Entity mapping with JPA annotations
 - Maven project structure
-- Cloud deployment with Railway
-- Environment variable configuration
+- Docker containerization
+- Multi-stage Docker builds
+- Cloud deployment with Render
+- Environment variable configuration for security
+- Base64 encoding for JWT secrets
+
+## 🔧 Technical Highlights
+
+### JWT Security Implementation
+- Secure token generation with 256-bit HMAC-SHA algorithm
+- Environment variable management for JWT secrets
+- Base64-encoded secrets meeting RFC 7518 specifications
+- 24-hour token expiration for security
+
+### Docker Implementation
+- Multi-stage build for optimized image size
+- Separate build and runtime stages
+- Maven wrapper for consistent builds
+- Minimal JRE runtime image
+
+### Database Security
+- Passwords hashed with BCrypt before storage
+- Separate environment variables for credentials
+- JDBC connection with SSL support
+- Managed PostgreSQL with automatic backups
 
 ## 📝 License
 
